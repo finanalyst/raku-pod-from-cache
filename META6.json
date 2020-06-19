@@ -9,7 +9,9 @@
   "auth": "github:finanalyst",
   "depends": [],
   "build-depends": [],
-  "test-depends": [],
+  "test-depends": [
+    "File::Directory::Tree"
+  ],
   "provides": {
     "Pod::From::Cache": "lib/Pod/From/Cache.pm6"
   },

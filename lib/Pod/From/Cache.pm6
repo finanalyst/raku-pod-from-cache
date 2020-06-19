@@ -13,7 +13,6 @@ has @.extensions;
 has $!cache-path;
 has $!precomp-repo;
 has @.refreshed-pods;
-has %.handles;
 has @.sources;
 
 submethod BUILD(
@@ -28,29 +27,24 @@ submethod BUILD(
 
 submethod TWEAK {
     for self.get-pods -> $pod-file-path {
-use trace;
         my $t = $pod-file-path.IO.modified;
         my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
         my $handle;
         my $checksum;
-say "At line $?LINE";
-        ($handle, $checksum) = $!precomp-repo.load( $id, :src($pod-file-path), :since($t) );
-say "At line $?LINE err: ", $!;
-        if $! or ! $checksum.defined
-        {
-            @!refreshed-pods.push( $pod-file-path );
-say "At line $?LINE";
-            $handle = $!precomp-repo.try-load(
-                    CompUnit::PrecompilationDependency::File.new(
-                            :src($pod-file-path),
-                            :$id,
-                            :spec(CompUnit::DependencySpecification.new(:short-name($pod-file-path))),
-                            ),
-                    );
+        try {
+            ($handle, $checksum) = $!precomp-repo.load( $id, :src($pod-file-path), :since($t) );
         }
-        %!handles{$pod-file-path} = $handle.unit.Str;
-
-say "At line $?LINE";    }
+        if $! or ! $checksum.defined {
+            @!refreshed-pods.push($pod-file-path);
+            $handle = $!precomp-repo.try-load(
+                CompUnit::PrecompilationDependency::File.new(
+                    :src($pod-file-path),
+                    :$id,
+                    :spec(CompUnit::DependencySpecification.new(:short-name($pod-file-path))),
+                )
+            )
+        }
+    }
 }
 
 #| Recursively finds all rukupod files with extensions in @!extensions
@@ -84,7 +78,14 @@ method list-files {
 
 #| pod(Str $pod-file-path) returns the pod tree in the pod file
 method pod( Str $pod-file-path ) {
+    my $handle = $!precomp-repo.try-load(
+            CompUnit::PrecompilationDependency::File.new(
+                    :src($pod-file-path),
+                    :id(CompUnit::PrecompilationId.new-from-string($pod-file-path)),
+                    :spec(CompUnit::DependencySpecification.new(:short-name($pod-file-path))),
+                    ),
+            );
     X::Pod::From::Cache::NoPodInCache.new(:$pod-file-path).throw
-        unless %!handles{ $pod-file-path }:exists;
-    nqp::atkey( %!handles{ $pod-file-path }, '$=pod' )
+        without $handle;
+    nqp::atkey( $handle.unit , '$=pod' )
 }

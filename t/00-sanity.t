@@ -1,10 +1,7 @@
+use v6.d;
 use Test;
 
+plan 1;
 use-ok 'Pod::From::Cache', 'Module OK';
-
-my $m;
-use Pod::From::Cache;
-
-lives-ok { $m = Pod::From::Cache.new(:doc-source<t/doctest>) }, "Instantiates with default parameters";
 
 done-testing;
