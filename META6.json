@@ -10,7 +10,8 @@
   "depends": [],
   "build-depends": [],
   "test-depends": [
-    "File::Directory::Tree"
+    "File::Directory::Tree",
+    "File::Temp"
   ],
   "provides": {
     "Pod::From::Cache": "lib/Pod/From/Cache.pm6"
