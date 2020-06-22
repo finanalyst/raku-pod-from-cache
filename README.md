@@ -23,6 +23,10 @@ say '(None)' unless +$cache.list-files;
 
 # Get and use pod in a source
 dd $cache.pod( $cache.sources[0] );
+
+rm-cache( 'rakudoc_cache' );
+# removes the cache directory using OS dependent methods.
+
 ```
 
 ## Initialisation
@@ -48,7 +52,7 @@ Once `$cache` is instantiated, then the pod for a source file can be obtained as
 $cache.pod( 'Language/Raku-101.pod' );
 ```
 
-# Ignore Files
+## Ignore Files
 It is possible to place a file `.ignore-cache` in the directory specified by `:doc-source` (by default `docs`).
 
 Each line should be the name of a file (and the path relative to the `:doc-source` directory) that is to be ignored.
@@ -59,7 +63,7 @@ to the cache.
 If the `.pod` method is called with a file matching a name in `.ignore-cache`, it will return Nil, rather
 than a pod tree.
 
-# Exceptions
+## Exceptions
 
 The following exceptions are thrown.
 

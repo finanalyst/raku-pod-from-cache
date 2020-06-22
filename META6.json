@@ -18,7 +18,7 @@
   },
   "resources": [],
   "support": {
-    "source": "https://github.com/perl6/Pod-To-Cached/issues"
+    "source": "https://github.com/finanalyst/raku-pod-from-cache/issues"
   },
   "license": "Artistic-2.0",
   "source-url": "https://github.com/finanalyst/raku-pod-from-cache.git",

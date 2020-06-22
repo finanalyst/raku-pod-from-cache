@@ -15,6 +15,17 @@ class X::Pod::From::Cache::BadSource is Exception {
     }
 }
 
+
+#| removes the cache using OS dependent arguments.
+sub rm-cache($path = 'rakudo_cache' ) is export {
+    if $*SPEC ~~ IO::Spec::Win32 {
+        my $win-path = "$*CWD/$path".trans( ["/"] => ["\\"] );
+        shell "rmdir /S /Q $win-path" ;
+    } else {
+        shell "rm -rf $path";
+    }
+}
+
 class Pod::From::Cache {
     use nqp;
 
@@ -87,17 +98,6 @@ class Pod::From::Cache {
             }
         }($!doc-source); # is the first definition of $dir
         @!sources .= grep({ ! $!ignore{$_} });
-    }
-
-
-    #| removes the cache using OS dependent arguments.
-    sub rm-cache($path = 'rakudo_cache' ) is export {
-        if $*SPEC ~~ IO::Spec::Win32 {
-            my $win-path = "$*CWD/$path".trans( ["/"] => ["\\"] );
-            shell "rmdir /S /Q $win-path" ;
-        } else {
-            shell "rm -rf $path";
-        }
     }
 
     #| lists the files that have changed
