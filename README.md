@@ -47,3 +47,31 @@ Once `$cache` is instantiated, then the pod for a source file can be obtained as
 ```raku
 $cache.pod( 'Language/Raku-101.pod' );
 ```
+
+# Ignore Files
+It is possible to place a file `.ignore-cache` in the directory specified by `:doc-source` (by default `docs`).
+
+Each line should be the name of a file (and the path relative to the `:doc-source` directory) that is to be ignored.
+
+Any file exactly matching a file in `.ignore-cache` will not be included in the sources added
+to the cache.
+
+If the `.pod` method is called with a file matching a name in `.ignore-cache`, it will return Nil, rather
+than a pod tree.
+
+# Exceptions
+
+The following exceptions are thrown.
+
+- `X::Pod::From::Cache::NoPodInCache`
+
+An attempt has been made to extract pod from a file not in Sources
+
+- `X::Pod::From::Cache::NoSources`
+
+No sources matching `extentions` were found under `doc-sources` directory
+
+- `X::Pod::From::Cache::BadSource`
+
+An error was caught when compiling a file. Probably a compile error. The error is given in the
+Exception message.

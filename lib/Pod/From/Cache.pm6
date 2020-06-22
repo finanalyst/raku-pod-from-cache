@@ -26,6 +26,7 @@ class Pod::From::Cache {
     has @.sources;
     has %!errors;
     has %!ids;
+    has SetHash $!ignore .= new;
 
     submethod BUILD(
         :@!extensions = <pod pod6 p6 pm pm6 rakupod>,
@@ -38,6 +39,12 @@ class Pod::From::Cache {
         }
 
     submethod TWEAK {
+        # get the .ignore-cache contents, if it exists and add to a set.
+        if ( $!doc-source ~ '/.ignore-cache').IO.f {
+            for ($!doc-source ~ '/.ignore-cache').IO.lines {
+                $!ignore{ $!doc-source ~ '/' ~ .trim }++;
+            }
+        }
         self.get-pods;
         X::Pod::From::Cache::NoSources.new(:$!doc-source).throw
             unless @!sources;
@@ -67,7 +74,7 @@ class Pod::From::Cache {
             }
         }
         X::Pod::From::Cache::BadSource.new(:errors(%!errors.list)).throw
-            if %!errors
+            if %!errors;
     }
 
     #| Recursively finds all rukupod files with extensions in @!extensions
@@ -79,6 +86,7 @@ class Pod::From::Cache {
                 take slip sort recurse $_ if .d;
             }
         }($!doc-source); # is the first definition of $dir
+        @!sources .= grep({ ! $!ignore{$_} });
     }
 
 
@@ -101,9 +109,9 @@ class Pod::From::Cache {
 
     #| pod(Str $pod-file-path) returns the pod tree in the pod file
     method pod( Str $pod-file-path ) {
+        return Nil if $!ignore{$pod-file-path};
         X::Pod::From::Cache::NoPodInCache.new(:$pod-file-path).throw
             unless %!ids{$pod-file-path}:exists;
-
         my $handle = $!precomp-repo.try-load(
                 CompUnit::PrecompilationDependency::File.new(
                         :src($pod-file-path),
