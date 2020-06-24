@@ -1,7 +1,7 @@
-lib/.precomp/*
-.precomp/*
-t/tmp/
-rakudoc_cache/*
+.precomp/
+/t/tmp/
+/t/cache/
+rakudoc_cache/
 workspace.xml
 *.iml
 .idea/
