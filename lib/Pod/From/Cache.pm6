@@ -49,11 +49,16 @@ class Pod::From::Cache {
             );
         }
 
+    method path-for-fragment($fragment) {
+        ~ reduce {$^a.add($^b)}, $!doc-source.IO, | $*SPEC.splitdir($fragment);
+    }
+
     submethod TWEAK {
         # get the .ignore-cache contents, if it exists and add to a set.
-        if ( $!doc-source ~ '/.ignore-cache').IO.f {
-            for ($!doc-source ~ '/.ignore-cache').IO.lines {
-                $!ignore{ $!doc-source ~ '/' ~ .trim }++;
+	my $ignore = $!doc-source.IO.add('.ignore-cache');
+        if $ignore.f {
+            for $ignore.lines {
+                $!ignore{ self.path-for-fragment(.trim) }++;
             }
         }
         self.get-pods;
