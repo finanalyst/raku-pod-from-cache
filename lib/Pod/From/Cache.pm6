@@ -40,7 +40,7 @@ class Pod::From::Cache {
     has SetHash $!ignore .= new;
 
     submethod BUILD(
-        :@!extensions = <pod pod6 p6 pm pm6 rakupod>,
+        :@!extensions = <rakudoc pod pod6 p6 pm pm6>,
         :$!doc-source = 'docs',
         :$!cache-path = 'rakudoc_cache' # trans OS default directory name ,
         ) {

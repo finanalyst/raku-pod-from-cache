@@ -13,7 +13,7 @@ use Pod::From::Cache;
 
 my $cache = Pod::From::Cache.new;
 # used the default values of
-# - :extensions = <pod pod6 p6 pm pm6 rakupod>
+# - :extensions = <rakudoc pod pod6 p6 pm pm6>
 # - :doc-source = 'docs',
 # - :cache-path = 'rakudoc_cache'
 
