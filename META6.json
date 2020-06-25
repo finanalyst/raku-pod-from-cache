@@ -12,7 +12,7 @@
   "test-depends": [
     "File::Directory::Tree",
     "File::Temp",
-    "Test::Meta"
+    "Test::META"
   ],
   "provides": {
     "Pod::From::Cache": "lib/Pod/From/Cache.pm6"
