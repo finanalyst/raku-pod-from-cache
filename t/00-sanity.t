@@ -1,7 +1,19 @@
 use v6.d;
 use Test;
 
-plan 1;
+plan 2;
 use-ok 'Pod::From::Cache', 'Module OK';
+
+constant AUTHOR = ?%*ENV<AUTHOR_TESTING>;
+
+if AUTHOR {
+    require Test::META <&meta-ok>;
+    meta-ok(:relaxed-name);
+    done-testing;
+}
+else {
+    skip-rest "Skipping author test";
+    exit;
+}
 
 done-testing;
