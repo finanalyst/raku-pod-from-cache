@@ -8,7 +8,7 @@ constant AUTHOR = ?%*ENV<AUTHOR_TESTING>;
 
 if AUTHOR {
     require Test::META <&meta-ok>;
-    meta-ok(:relaxed-name);
+    meta-ok;
     done-testing;
 }
 else {
