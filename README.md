@@ -5,6 +5,12 @@
     It provides only two methods and has far fewer dependencies. It relies only
     on the CompUnit Modules.
     
+## Caution Caution
+`Pod::From::Cache` relies on the `Precomp` Modules which are designed to provide precompiled
+code as quickly as possible. Once a cache has been loaded itis 
+difficult to make changes to the cache in the same program. Consequently it is
+not possible to change a source on file and for the change to be detected in the same program. 
+
    
 ## Synopsis
 ``` raku

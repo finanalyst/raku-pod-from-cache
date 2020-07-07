@@ -20,8 +20,9 @@ ok $h<t/doctest/community.pod6 t/doctest/operators.pod6 t/doctest/simple.pod6 t/
 
 is $m.pod( DOC ~ '/contexts.pod6' ) , Nil, 'Ignored files get Nil returned';
 
-$fn.IO.unlink;
+#$fn.IO.unlink;
 
-rmtree CACHE;
+#leave cache for next tests
+#rmtree CACHE;
 
 done-testing;
