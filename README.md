@@ -58,6 +58,15 @@ Once `$cache` is instantiated, then the pod for a source file can be obtained as
 $cache.pod( 'Language/Raku-101.pod' );
 ```
 
+## Progress
+
+Optionally a closure can be provided that will show progress in some way.
+This is provided because large Pod6 files take considerable time to process.
+
+:start is the number of files to be processed.
+
+:dec is when a file has been processed.
+
 ## Ignore Files
 It is possible to place a file `.ignore-cache` in the directory specified by `:doc-source` (by default `docs`).
 
