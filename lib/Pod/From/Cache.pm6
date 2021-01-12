@@ -60,11 +60,11 @@ class Pod::From::Cache {
             }
         }
         self.get-pods;
-        &.progress.(:start(+@!sources)) with &!progress;
+        &!progress.(:start(+@!sources)) with &!progress;
         X::Pod::From::Cache::NoSources.new(:$!doc-source).throw
             unless @!sources;
         for @!sources -> $pod-file-path {
-            &.progress.(:dec) with &.progress;
+            &!progress.(:dec) with &!progress;
             my $t = $pod-file-path.IO.modified;
             my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
             %!ids{$pod-file-path} = $id.id;
