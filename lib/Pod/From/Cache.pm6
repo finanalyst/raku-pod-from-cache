@@ -38,9 +38,6 @@ class Pod::From::Cache {
     has %!errors;
     has %!ids;
     has SetHash $!ignore .= new;
-    #| a closure passed to the object at instantiation
-    #| calls start=>number of pod files, or :dec to indicate the number has been decreased.
-    has &.progress;
 
     submethod BUILD(
         :@!extensions = <rakudoc pod pod6 p6 pm pm6>,
@@ -52,7 +49,7 @@ class Pod::From::Cache {
             );
         }
 
-    submethod TWEAK {
+    submethod TWEAK( :&progress ) {
         # get the .ignore-cache contents, if it exists and add to a set.
         if ( $!doc-source ~ '/.ignore-cache').IO.f {
             for ($!doc-source ~ '/.ignore-cache').IO.lines {
@@ -60,11 +57,11 @@ class Pod::From::Cache {
             }
         }
         self.get-pods;
-        &!progress.(:start(+@!sources)) with &!progress;
+        &progress.(:start(+@!sources)) with &progress;
         X::Pod::From::Cache::NoSources.new(:$!doc-source).throw
             unless @!sources;
         for @!sources -> $pod-file-path {
-            &!progress.(:dec) with &!progress;
+            &progress.(:dec) with &progress;
             my $t = $pod-file-path.IO.modified;
             my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
             %!ids{$pod-file-path} = $id.id;
