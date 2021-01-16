@@ -7,7 +7,7 @@
     
 ## Caution Caution
 `Pod::From::Cache` relies on the `Precomp` Modules which are designed to provide precompiled
-code as quickly as possible. Once a cache has been loaded itis 
+code as quickly as possible. Once a cache has been loaded it is 
 difficult to make changes to the cache in the same program. Consequently it is
 not possible to change a source on file and for the change to be detected in the same program. 
 
@@ -74,6 +74,7 @@ This is provided because large Pod6 files take considerable time to process.
 
 ## Ignore Files
 It is possible to place a file `.ignore-cache` in the directory specified by `:doc-source` (by default `docs`).
+An ignore list can be provided via `:ignore` when the object is instantiated. 
 
 Each line should be the name of a file (and the path relative to the `:doc-source` directory) that is to be ignored.
 

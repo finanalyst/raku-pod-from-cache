@@ -49,12 +49,13 @@ class Pod::From::Cache {
             );
         }
 
-    submethod TWEAK( :&progress ) {
+    submethod TWEAK( :&progress, :@ignore = () ) {
         # get the .ignore-cache contents, if it exists and add to a set.
-        if ( $!doc-source ~ '/.ignore-cache').IO.f {
+        if ( $!doc-source ~ '/.ignore-cache').IO.f or +@ignore {
             for ($!doc-source ~ '/.ignore-cache').IO.lines {
                 $!ignore{ $!doc-source ~ '/' ~ .trim }++;
             }
+            for @ignore { $!ignore{ $!doc-source ~ '/' ~ .trim }++ }
         }
         self.get-pods;
         &progress.(:start(+@!sources)) with &progress;
