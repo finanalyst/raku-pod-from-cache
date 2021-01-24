@@ -49,7 +49,7 @@ class Pod::From::Cache {
             );
         }
 
-    submethod TWEAK( :&progress, :@ignore = () ) {
+    submethod TWEAK( :$progress, :@ignore = () ) {
         # get the .ignore-cache contents, if it exists and add to a set.
         if ( $!doc-source ~ '/.ignore-cache').IO.f or +@ignore {
             for ($!doc-source ~ '/.ignore-cache').IO.lines {
@@ -58,11 +58,11 @@ class Pod::From::Cache {
             for @ignore { $!ignore{ $!doc-source ~ '/' ~ .trim }++ }
         }
         self.get-pods;
-        &progress.(:start(+@!sources)) with &progress;
+        $progress.(:start(+@!sources)) if $progress ~~ Callable;
         X::Pod::From::Cache::NoSources.new(:$!doc-source).throw
             unless @!sources;
         for @!sources -> $pod-file-path {
-            &progress.(:dec) with &progress;
+            $progress.(:dec) with $progress;
             my $t = $pod-file-path.IO.modified;
             my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
             %!ids{$pod-file-path} = $id.id;
