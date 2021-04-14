@@ -22,7 +22,7 @@ sub rm-cache($path = 'rakudo_cache' ) is export {
         my $win-path = "$*CWD/$path".trans( ["/"] => ["\\"] );
         shell "rmdir /S /Q $win-path" ;
     } else {
-        shell "rm -rf $path";
+        shell "rm -r $path";
     }
 }
 
