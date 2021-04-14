@@ -73,7 +73,7 @@ class Pod::From::Cache {
             try {
                 ($handle, $checksum) = $!precomp-repo.load( $id, :src($pod-file-path), :since($t) );
             }
-            if $! or ! $checksum.defined {
+            unless $handle {
                 @!refreshed-pods.push($pod-file-path);
                 $handle = $!precomp-repo.try-load(
                     CompUnit::PrecompilationDependency::File.new(
