@@ -7,11 +7,11 @@ constant DOC = 't/doctest';
 use Pod::From::Cache;
 my $fn = DOC ~ '/.ignore-cache';
 
-# expecting a cache to remain from the last test
-
+rmtree CACHE;
 my Pod::From::Cache $cache .= new( :doc-source( DOC ), :cache-path( CACHE ));
 
-nok $cache.list-files, 'no files have channged';
+$cache .= new( :doc-source( DOC ), :cache-path( CACHE ));
+nok $cache.list-files, 'no files have changed';
 $fn.IO.unlink;
 rmtree CACHE;
 
