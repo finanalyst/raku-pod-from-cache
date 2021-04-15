@@ -68,12 +68,17 @@ class Pod::From::Cache {
             my $t = $pod-file-path.IO.modified;
             my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
             %!ids{$pod-file-path} = $id.id;
-            my $handle;
-            my $checksum;
+            my ( $handle, $checksum );
             try {
-                ($handle, $checksum) = $!precomp-repo.load( $id, :src($pod-file-path), :since($t) );
+                ( $handle, $checksum ) =
+                        $!precomp-repo.load($id, :source($pod-file-path.IO));
             }
-            unless $handle {
+            if $! or !$checksum.defined {
+                say $!.raku if $!;
+                say "Handle ", $handle;
+                say "Unit {$handle.unit.raku}" if $handle;
+                say "Checksum defined ", $checksum.defined;
+                say "Refreshing $pod-file-path, $t";
                 @!refreshed-pods.push($pod-file-path);
                 $handle = $!precomp-repo.try-load(
                     CompUnit::PrecompilationDependency::File.new(

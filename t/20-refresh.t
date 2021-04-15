@@ -10,6 +10,7 @@ use Pod::From::Cache;
 
 my Pod::From::Cache $m;
 
+rmtree CACHE;
 my $fn = 'simple.pod6';
 plan 5;
 
