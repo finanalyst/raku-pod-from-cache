@@ -15,7 +15,6 @@ class X::Pod::From::Cache::BadSource is Exception {
     }
 }
 
-
 #| removes the cache using OS dependent arguments.
 sub rm-cache($path = 'rakudo_cache' ) is export {
     if $*SPEC ~~ IO::Spec::Win32 {
@@ -69,16 +68,12 @@ class Pod::From::Cache {
             my $t = $pod-file-path-io.modified;
             my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path ~ "|" ~ $pod-file-path-io.slurp);
             %!ids{$pod-file-path} = $id.id;
-            say "$pod-file-path-io, {$id.id}";
             my ( $handle, $checksum );
             try {
                 ( $handle, $checksum ) =
                         $!precomp-repo.load($id, :source($pod-file-path.IO));
             }
             if !$checksum.defined and !$handle {
-                say "We have handle $pod-file-path, $handle" if $handle;
-                say "Error $!" if $!;
-                say "Checksum not defined" if !$checksum.defined;
                 @!refreshed-pods.push($pod-file-path);
                 $handle = $!precomp-repo.try-load(
                     CompUnit::PrecompilationDependency::File.new(
