@@ -10,7 +10,7 @@ rmtree CACHE;
 my Pod::From::Cache $m;
 my $fn = 'simple.pod6';
 
-plan 10;
+plan 2;
 
 subtest "Cache works", {
     lives-ok { $m .= new(:doc-source(DOC), :cache-path(CACHE)) }, "Instantiates with minimum parameters";

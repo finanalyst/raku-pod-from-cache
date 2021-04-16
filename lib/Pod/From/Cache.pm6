@@ -65,20 +65,20 @@ class Pod::From::Cache {
             unless @!sources;
         for @!sources -> $pod-file-path {
             $progress.(:dec) with $progress;
-            my $t = $pod-file-path.IO.modified;
-            my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
+            my $pod-file-path-io = $pod-file-path.IO;
+            my $t = $pod-file-path-io.modified;
+            my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path ~ "|" ~ $pod-file-path-io.slurp);
             %!ids{$pod-file-path} = $id.id;
+            say "$pod-file-path-io, {$id.id}";
             my ( $handle, $checksum );
             try {
                 ( $handle, $checksum ) =
                         $!precomp-repo.load($id, :source($pod-file-path.IO));
             }
-            if $! or !$checksum.defined {
-                say $!.raku if $!;
-                say "Handle ", $handle;
-                say "Unit {$handle.unit.raku}" if $handle;
-                say "Checksum defined ", $checksum.defined;
-                say "Refreshing $pod-file-path, $t";
+            if !$checksum.defined and !$handle {
+                say "We have handle $pod-file-path, $handle" if $handle;
+                say "Error $!" if $!;
+                say "Checksum not defined" if !$checksum.defined;
                 @!refreshed-pods.push($pod-file-path);
                 $handle = $!precomp-repo.try-load(
                     CompUnit::PrecompilationDependency::File.new(
@@ -86,7 +86,7 @@ class Pod::From::Cache {
                         :$id,
                         :spec(CompUnit::DependencySpecification.new(:short-name($pod-file-path))),
                     )
-                )
+                );
             }
             CATCH {
                 default {
