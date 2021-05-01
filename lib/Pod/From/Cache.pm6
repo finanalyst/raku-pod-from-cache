@@ -15,14 +15,13 @@ class X::Pod::From::Cache::BadSource is Exception {
     }
 }
 
-
 #| removes the cache using OS dependent arguments.
 sub rm-cache($path = 'rakudo_cache' ) is export {
     if $*SPEC ~~ IO::Spec::Win32 {
         my $win-path = "$*CWD/$path".trans( ["/"] => ["\\"] );
         shell "rmdir /S /Q $win-path" ;
     } else {
-        shell "rm -rf $path";
+        shell "rm -r $path";
     }
 }
 
@@ -65,15 +64,16 @@ class Pod::From::Cache {
             unless @!sources;
         for @!sources -> $pod-file-path {
             $progress.(:dec) with $progress;
-            my $t = $pod-file-path.IO.modified;
-            my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path);
+            my $pod-file-path-io = $pod-file-path.IO;
+            my $t = $pod-file-path-io.modified;
+            my $id = CompUnit::PrecompilationId.new-from-string($pod-file-path ~ "|" ~ $pod-file-path-io.slurp);
             %!ids{$pod-file-path} = $id.id;
-            my $handle;
-            my $checksum;
+            my ( $handle, $checksum );
             try {
-                ($handle, $checksum) = $!precomp-repo.load( $id, :src($pod-file-path), :since($t) );
+                ( $handle, $checksum ) =
+                        $!precomp-repo.load($id, :source($pod-file-path.IO));
             }
-            if $! or ! $checksum.defined {
+            if !$checksum.defined and !$handle {
                 @!refreshed-pods.push($pod-file-path);
                 $handle = $!precomp-repo.try-load(
                     CompUnit::PrecompilationDependency::File.new(
@@ -81,7 +81,7 @@ class Pod::From::Cache {
                         :$id,
                         :spec(CompUnit::DependencySpecification.new(:short-name($pod-file-path))),
                     )
-                )
+                );
             }
             CATCH {
                 default {
