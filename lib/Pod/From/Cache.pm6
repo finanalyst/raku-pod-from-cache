@@ -93,7 +93,7 @@ class Pod::From::Cache {
             if %!errors;
     }
 
-    #| Recursively finds all rukupod files with extensions in @!extensions
+    #| Recursively finds all rakupod files with extensions in @!extensions
     #| Returns an array of Str
     method get-pods {
         @!sources = my sub recurse ($dir) {
