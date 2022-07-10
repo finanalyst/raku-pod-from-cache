@@ -1,7 +1,7 @@
 {
   "name": "Pod::From::Cache",
   "description": "Looks for POD6 files recursively under a root directory, returns POD for recompiled or specified file.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "perl": "6.d",
   "authors": [
     "Richard Hainsworth, aka finanalyst"
@@ -15,7 +15,7 @@
     "Test::META"
   ],
   "provides": {
-    "Pod::From::Cache": "lib/Pod/From/Cache.pm6"
+    "Pod::From::Cache": "lib/Pod/From/Cache.rakumod"
   },
   "resources": [],
   "support": {
