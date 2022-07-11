@@ -1,8 +1,8 @@
 use Test;
 use File::Directory::Tree;
 
-constant CACHE = 't/cache';
-constant DOC = 't/doctest';
+constant CACHE = 'xt/cache';
+constant DOC = 'xt/doctest';
 
 use Pod::From::Cache;
 
@@ -16,7 +16,7 @@ $fn.IO.spurt(q:to/IGNORE/);
 
 my Pod::From::Cache $m .= new( :doc-source( DOC ), :cache-path( CACHE ));
 my $h = $m.sources.SetHash;
-ok $h<t/doctest/community.pod6 t/doctest/operators.pod6 t/doctest/simple.pod6 t/doctest/sub/simple.pod6 >, 'contexts.pod6 is ignored';
+ok $h<xt/doctest/community.pod6 xt/doctest/operators.pod6 xt/doctest/simple.pod6 xt/doctest/sub/simple.pod6 >, 'contexts.pod6 is ignored';
 
 is $m.pod( DOC ~ '/contexts.pod6' ) , Nil, 'Ignored files get Nil returned';
 

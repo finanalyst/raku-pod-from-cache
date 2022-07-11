@@ -1,0 +1,11 @@
+use v6.d;
+use Test;
+use Test::META;
+
+plan 2;
+
+meta-ok;
+indir 'xt', { shell "unzip -qq -o doctest.zip" };
+ok 'xt/doctest'.IO.d, "Got test files";
+
+done-testing;

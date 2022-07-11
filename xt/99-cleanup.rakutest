@@ -1,0 +1,11 @@
+use v6.d;
+use Test;
+use File::Directory::Tree;
+
+plan 2;
+rmtree 'xt/doctest';
+rmtree 'xt/cache' ;
+nok 'xt/doctest'.IO.d, 'doctest gone';
+nok 'xt/cache'.IO.d, 'cache gone';
+
+done-testing;

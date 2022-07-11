@@ -3,8 +3,8 @@ use Test;
 use File::Directory::Tree;
 use Pod::From::Cache;
 
-constant CACHE = 't/cache';
-constant DOC = 't/tmp';
+constant CACHE = 'xt/cache';
+constant DOC = 'xt/tmp';
 
 my Pod::From::Cache $m;
 
@@ -26,7 +26,7 @@ else { mktree DOC }
 throws-like { $m .= new(:doc-source(DOC), :cache-path(CACHE)) },
         X::Pod::From::Cache::BadSource, 'Caught compile error', message => / 'File source' .+ 'a-pod-file' .+ 'has error:' /;
 
-diag 'Prepare for t/45-compile-ok';
+diag 'Prepare for xt/45-compile-ok';
 
 (DOC ~ '/a-pod-file.pod6').IO.spurt(q:to/POD-CONTENT/);
     =begin pod

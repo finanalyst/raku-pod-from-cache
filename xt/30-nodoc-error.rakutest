@@ -2,8 +2,8 @@ use Test;
 use File::Directory::Tree;
 use Pod::From::Cache;
 
-constant CACHE = 't/cache';
-constant DOC = 't/tmp';
+constant CACHE = 'xt/cache';
+constant DOC = 'xt/tmp';
 
 my Pod::From::Cache $m;
 

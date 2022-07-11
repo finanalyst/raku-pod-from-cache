@@ -1,4 +1,4 @@
-use v6.*;
+use v6.d;
 
 class X::Pod::From::Cache::NoPodInCache is Exception {
     has $.pod-file-path;
@@ -19,7 +19,7 @@ class X::Pod::From::Cache::BadSource is Exception {
 sub rm-cache($path = 'rakudo_cache' ) is export {
     if $*SPEC ~~ IO::Spec::Win32 {
         my $win-path = "$*CWD/$path".trans( ["/"] => ["\\"] );
-        shell "rmdir /S /Q $win-path" ;
+        shell "rmdir /S /Q $win-path"  if $win-path.IO.d;
     } else {
         shell "rm -r $path" if $path.IO.d;
     }
@@ -39,7 +39,7 @@ class Pod::From::Cache {
     has SetHash $!ignore .= new;
 
     submethod BUILD(
-        :@!extensions = <rakudoc pod pod6 p6 pm pm6>,
+        :@!extensions = <rakudoc rakumod pod pod6 p6 pm pm6>,
         :$!doc-source = 'docs',
         :$!cache-path = 'rakudoc_cache' # trans OS default directory name ,
         ) {
@@ -93,7 +93,7 @@ class Pod::From::Cache {
             if %!errors;
     }
 
-    #| Recursively finds all rukupod files with extensions in @!extensions
+    #| Recursively finds all rakudoc files with extensions in @!extensions
     #| Returns an array of Str
     method get-pods {
         @!sources = my sub recurse ($dir) {
@@ -108,6 +108,10 @@ class Pod::From::Cache {
     #| lists the files that have changed
     #| since the last time the routine was run
     #| This is an alias for @.refreshed-pods as it replaces the same method in Pod::To::Cached
+    method list-changed-files {
+        @!refreshed-pods
+    }
+    #| see list-refreshed-files
     method list-files {
         @!refreshed-pods
     }
