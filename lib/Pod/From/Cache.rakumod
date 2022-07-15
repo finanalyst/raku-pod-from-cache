@@ -41,11 +41,13 @@ class Pod::From::Cache {
     submethod BUILD(
         :@!extensions = <rakudoc rakumod pod pod6 p6 pm pm6>,
         :$!doc-source = 'docs',
-        :$!cache-path = 'rakudoc_cache' # trans OS default directory name ,
+        :$!cache-path = 'rakudoc_cache' # trans OS default directory name
         ) {
+            %*ENV<RAKUDO_NO_DEPRECATIONS> = 1 if ( $*RAKU.compiler.version ge "v2022.06") ;
             $!precomp-repo = CompUnit::PrecompilationRepository::Default.new(
                 :store(CompUnit::PrecompilationStore::File.new(:prefix($!cache-path.IO))),
             );
+            %*ENV<RAKUDO_NO_DEPRECATIONS> = 0;
         }
 
     submethod TWEAK( :$progress, :@ignore = () ) {
