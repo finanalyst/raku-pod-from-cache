@@ -11,7 +11,7 @@ rmtree CACHE;
 my Pod::From::Cache $cache .= new( :doc-source( DOC ), :cache-path( CACHE ));
 
 $cache .= new( :doc-source( DOC ), :cache-path( CACHE ));
-nok $cache.list-files, 'no files have changed';
+nok $cache.list-changed-files, 'no files have changed';
 $fn.IO.unlink;
 rmtree CACHE;
 

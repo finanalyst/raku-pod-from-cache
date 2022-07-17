@@ -38,16 +38,16 @@ class Pod::From::Cache {
     has %!ids;
     has SetHash $!ignore .= new;
 
+    my constant CUPSFS = ::("CompUnit::PrecompilationStore::File" ~ ("System","").first({ ::("CompUnit::PrecompilationStore::File$_") !~~ Failure }));
+
     submethod BUILD(
         :@!extensions = <rakudoc rakumod pod pod6 p6 pm pm6>,
         :$!doc-source = 'docs',
         :$!cache-path = 'rakudoc_cache' # trans OS default directory name
         ) {
-            %*ENV<RAKUDO_NO_DEPRECATIONS> = 1 if ( $*RAKU.compiler.version ge "v2022.06") ;
-            $!precomp-repo = CompUnit::PrecompilationRepository::Default.new(
-                :store(CompUnit::PrecompilationStore::File.new(:prefix($!cache-path.IO))),
-            );
-            %*ENV<RAKUDO_NO_DEPRECATIONS> = 0;
+           $!precomp-repo = CompUnit::PrecompilationRepository::Default.new(
+              :store(CUPSFS.new(:prefix($!cache-path.IO)))
+           )
         }
 
     submethod TWEAK( :$progress, :@ignore = () ) {

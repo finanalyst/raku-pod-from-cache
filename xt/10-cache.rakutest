@@ -16,7 +16,7 @@ subtest "Cache works", {
     lives-ok { $m .= new(:doc-source(DOC), :cache-path(CACHE)) }, "Instantiates with minimum parameters";
     ok CACHE.IO.d, 'cache created';
 
-    is-deeply $m.list-files , $m.sources, 'All source files are refreshed' ;
+    is-deeply $m.list-changed-files , $m.sources, 'All source files are refreshed' ;
 
     my $pod = $m.pod( (DOC ~ '/' ~ $fn ) );
     like $pod[0].contents[0].name, /
@@ -31,12 +31,12 @@ subtest "Cache works", {
 subtest "Refresh", {
     (DOC ~ "/$fn").IO.copy: "t/$fn";
     (DOC ~ "/$fn").IO.spurt(:append, qq:to/END/ );
-=begin pod
+        =begin pod
 
-=head The Time is { now.DateTime.hh-mm-ss }
+        =head The Time is { now.DateTime.hh-mm-ss }
 
-=end pod
-END
+        =end pod
+        END
     $m .= new(:doc-source(DOC), :cache-path(CACHE) );
 
     is-deeply $m.refreshed-pods, [ DOC ~ "/$fn" , ], 'Detected refreshed source';
