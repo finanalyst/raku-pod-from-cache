@@ -1,0 +1,18 @@
+use Test;
+use File::Directory::Tree;
+
+constant CACHE = 'xt/cache';
+constant DOC = 'xt/doctest';
+
+use Pod::From::Cache;
+
+my Pod::From::Cache $m;
+
+plan 1;
+
+$m .= new(:doc-source(DOC), :cache-path(CACHE) );
+
+like $m.source-last-commit, / <xdigit>+ /, 'git returns id of this repo';
+
+done-testing;
+

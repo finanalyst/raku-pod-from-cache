@@ -67,7 +67,7 @@ Once C<$cache> is instantiated, then the pod for a source file can be obtained a
 Optionally a closure with signature C<(:start, :end)> can be provided that will show progress in some way.
 This is provided because large Pod6 files take considerable time to process.
 
-=item C<:start> is the number of files to be processed.
+=item C<:start> is the list of files to be processed.
 =item C<:dec> is when a file has been processed.
 
 =head1 Ignore Files
@@ -96,5 +96,14 @@ The following exceptions are thrown.
 =item C<X::Pod::From::Cache::BadSource>
 =item2 An error was caught when compiling a file. Probably a compile error. The error is given in the
 Exception message.
+
+=head1 Examples / testing
+
+Examples for use can be seen in the extra tests. Set the C<NoDelete> environment variable to
+prevent the test directories from being deleted for inspection. Make sure to run the xt tests
+again without the C<NoDelete> variable to clean the test directory.
+
+    NoDelete=1 prove6 -I. xt/
+
 
 =end pod

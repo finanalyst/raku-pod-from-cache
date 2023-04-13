@@ -2,10 +2,17 @@ use v6.d;
 use Test;
 use File::Directory::Tree;
 
-plan 2;
-rmtree 'xt/doctest';
-rmtree 'xt/cache' ;
-nok 'xt/doctest'.IO.d, 'doctest gone';
-nok 'xt/cache'.IO.d, 'cache gone';
+plan 1;
+
+if %*ENV<NoDelete> {
+    skip-rest 'NoDelete set in environment';
+}
+else {
+    rmtree "xt/$_" for <doctest cache>;
+    my @xt = 'xt'.IO.dir.grep({ ($_ ~~ :e & :d ) and ($_ !~~ / \d+ \- /)});
+    ok @xt.elems == 0, @xt.elems
+        ?? ('sub-directories of ｢xt/｣ not all deleted, still got: ' ~ @xt>>.Str)
+        !! 'all sub-directories of ｢xt/｣ deleted';
+}
 
 done-testing;

@@ -1,4 +1,3 @@
-![github-tests-passing-badge](https://github.com/finanalyst/raku-pod-from-cache/actions/workflows/test.yaml/badge.svg)
 # Pod::From::Cache
 >
 ## Table of Contents
@@ -9,6 +8,7 @@
 [Progress](#progress)  
 [Ignore Files](#ignore-files)  
 [Exceptions](#exceptions)  
+[Examples / testing](#examples--testing)  
 
 ----
 # Description
@@ -67,7 +67,7 @@ sub count(:$start, :$end) { # show a start, then decrease, or inverse thereof }
 ```
 Optionally a closure with signature `(:start, :end)` can be provided that will show progress in some way. This is provided because large Pod6 files take considerable time to process.
 
-*  `:start` is the number of files to be processed.
+*  `:start` is the list of files to be processed.
 
 *  `:dec` is when a file has been processed.
 
@@ -83,8 +83,6 @@ If the `.pod` method is called with a file matching a name in `.ignore-cache`, i
 # Exceptions
 The following exceptions are thrown.
 
-
-
 *  `X::Pod::From::Cache::NoPodInCache`
 
 	*  An attempt has been made to extract pod from a file not in Sources
@@ -97,9 +95,17 @@ The following exceptions are thrown.
 
 	*  An error was caught when compiling a file. Probably a compile error. The error is given in the Exception message.
 
+# Examples / testing
+Examples for use can be seen in the extra tests. Set the `NoDelete` environment variable to prevent the test directories from being deleted for inspection. Make sure to run the xt tests again without the `NoDelete` variable to clean the test directory.
+
+```
+NoDelete=1 prove6 -I. xt/
+```
+
+
 
 
 
 
 ----
-Rendered from README at 2022-07-11T22:37:37Z
+Rendered from README at 2023-04-13T09:01:16Z
