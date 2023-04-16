@@ -135,7 +135,6 @@ class Pod::From::Cache {
     method source-last-commit {
         my $commit-id = '';
         try {
-            say $!doc-source;
             my $proc = run <<git -C { $!doc-source } rev-parse --short HEAD>>, :out;
             $commit-id = $proc.out.slurp(:close);
             CATCH {
