@@ -1,7 +1,7 @@
 {
   "name": "Pod::From::Cache",
   "description": "Looks for POD6 files recursively under a root directory, returns POD for recompiled or specified file.",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "perl": "6.d",
   "authors": [
     "Richard Hainsworth, aka finanalyst"
