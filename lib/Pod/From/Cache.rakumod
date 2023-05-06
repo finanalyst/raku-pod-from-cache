@@ -119,7 +119,7 @@ class Pod::From::Cache {
     }
     method source-last-commit {
         my $commit-id = '';
-        my $proc = run <<git -C { $!doc-source } rev-parse --short HEAD>>, :out;
+        my $proc = run <<git -C { $!doc-source } rev-parse --short HEAD>>, :out, :err;
         $commit-id = $proc.out.slurp(:close);
         $commit-id = 'git commit failed' if $proc.err.slurp(:close);
         $commit-id
