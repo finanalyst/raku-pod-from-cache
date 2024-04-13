@@ -1,5 +1,20 @@
 use v6.d;
 
+class X::Pod::From::Cache::NoPodInCache is Exception {
+    has $.pod-file-path;
+    method message { "No pod in cache associated with '$!pod-file-path'. Has the path changed?" }
+}
+class X::Pod::From::Cache::NoSources is Exception {
+    has $.doc-source;
+    method message { "No pod sources in '$!doc-source'." }
+}
+class X::Pod::From::Cache::BadSource is Exception {
+    has %.errors;
+    method message {
+        %!errors.fmt("File source %s has error:\n%s").join("\n")
+    }
+}
+
 #| removes the cache using OS dependent arguments.
 sub rm-cache($path = 'rakudo_cache' ) is export {
     if $*SPEC ~~ IO::Spec::Win32 {
@@ -47,7 +62,7 @@ class Pod::From::Cache {
         }
         self.get-pods;
         $progress.(:start(+@!sources)) if $progress ~~ Callable;
-        die "No pod sources in ｢$!doc-source｣."
+        X::Pod::From::Cache::NoSources.new(:$!doc-source).throw
             unless @!sources;
         for @!sources -> $pod-file-path {
             $progress.(:dec) with $progress;
@@ -76,7 +91,7 @@ class Pod::From::Cache {
                 }
             }
         }
-        die %!errors.fmt("File source %s has error:\n%s").join("\n")
+        X::Pod::From::Cache::BadSource.new(:%!errors).throw
             if %!errors;
     }
 
@@ -106,7 +121,7 @@ class Pod::From::Cache {
     #| pod(Str $pod-file-path) returns the pod tree in the pod file
     method pod( Str $pod-file-path ) {
         return Nil if $!ignore{$pod-file-path};
-        die "No pod in cache associated with ｢$pod-file-path｣. Has the path changed?"
+        X::Pod::From::Cache::NoPodInCache.new(:$pod-file-path).throw
             unless %!ids{$pod-file-path}:exists;
         my $handle = $!precomp-repo.try-load(
                 CompUnit::PrecompilationDependency::File.new(
