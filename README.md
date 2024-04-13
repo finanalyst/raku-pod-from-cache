@@ -1,4 +1,4 @@
-# Pod::From::Cache
+        # Pod::From::Cache
 >
 ## Table of Contents
 [Description](#description)  
@@ -12,7 +12,7 @@
 
 ----
 # Description
-This is a replacement for _Pod::To::Cached_, which will be mothballed. It provides only two methods and has far fewer dependencies. It relies only on the CompUnit Modules.
+This is a replacement for _Pod::To::Cached_, which will be mothballed. The module relies only on the CompUnit Modules.
 
 # Caution Caution
 _Pod::From::Cache_ relies on the _Precomp_ Modules which are designed to provide precompiled code as quickly as possible. Once a cache has been loaded it is difficult to make changes to the cache in the same program. Consequently it is not possible to change a source on file and for the change to be detected in the same program. 
@@ -37,6 +37,14 @@ _Pod::From::Cache_ relies on the _Precomp_ Modules which are designed to provide
 
     rm-cache( 'rakudoc_cache' );
     # removes the cache directory using OS dependent methods.
+
+    # if the sources are within a git repository, then the following have an effect
+
+    say $cache.last-edited('doc/Language/intro.rakudoc')
+    # returns the date git reports for the file from the log with format C<%cs>.
+
+    say $cache.source-last-commit
+    # provides the git commit id for the repository
 
 ```
 # Initialisation
@@ -108,4 +116,4 @@ NoDelete=1 prove6 -I. xt/
 
 
 ----
-Rendered from README at 2023-04-13T09:01:16Z
+Rendered from README at 2024-04-13T16:50:23Z

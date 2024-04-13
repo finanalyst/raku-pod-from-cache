@@ -36,6 +36,7 @@ class Pod::From::Cache {
     has @.sources;
     has %!errors;
     has %!ids;
+    has %!last-edited;
     has SetHash $!ignore .= new;
 
     my constant CUPSFS = ::("CompUnit::PrecompilationStore::File" ~ ("System","").first({ ::("CompUnit::PrecompilationStore::File$_") !~~ Failure }));
@@ -138,5 +139,18 @@ class Pod::From::Cache {
         $commit-id = $proc.out.slurp(:close);
         $commit-id = 'git commit failed' if $proc.err.slurp(:close);
         $commit-id
+    }
+    method last-edited( $path-file ) {
+        self.get-times unless %!last-edited.elems;
+        return 'File not in cache, check path' unless %!last-edited{ $path-file }:exists;
+        %!last-edited{ $path-file }
+    }
+    method get-times {
+        my $proc;
+        for @!sources {
+            $proc = run(<<git log -1 '--format="%cs"' -- $_ >>, :out, :err);
+            %!last-edited{ $_ } =
+                $proc.exitcode ?? 'Not available' !! $proc.out.slurp(:close)
+        }
     }
 }

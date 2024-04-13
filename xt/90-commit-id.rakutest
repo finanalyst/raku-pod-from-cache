@@ -8,11 +8,13 @@ use Pod::From::Cache;
 
 my Pod::From::Cache $m;
 
-plan 1;
+plan 3;
 
 $m .= new(:doc-source(DOC), :cache-path(CACHE) );
 
 like $m.source-last-commit, / <xdigit>+ /, 'git returns id of this repo';
+like $m.last-edited('xt/doctest/operators.rakudoc'), / \d\d\d\d\-\d\d\-\d\d /, 'got a date';
+like $m.last-edited('operators.rakudoc'), / 'File not in cache' /, 'wrong path';
 
 done-testing;
 

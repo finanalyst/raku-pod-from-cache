@@ -4,8 +4,7 @@
 =head1 Description
 
 This is a replacement for I<Pod::To::Cached>, which will be mothballed.
-It provides only two methods and has far fewer dependencies. It relies only
-on the CompUnit Modules.
+The module relies only on the CompUnit Modules.
 
 =head1 Caution Caution
 
@@ -34,6 +33,14 @@ not possible to change a source on file and for the change to be detected in the
 
     rm-cache( 'rakudoc_cache' );
     # removes the cache directory using OS dependent methods.
+
+    # if the sources are within a git repository, then the following have an effect
+
+    say $cache.last-edited('doc/Language/intro.rakudoc')
+    # returns the date git reports for the file from the log with format C<%cs>.
+
+    say $cache.source-last-commit
+    # provides the git commit id for the repository
 =end code
 
 =head1 Initialisation
