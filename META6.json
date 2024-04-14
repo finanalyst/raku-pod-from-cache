@@ -1,7 +1,7 @@
 {
   "name": "Pod::From::Cache",
   "description": "Looks for RakuDoc/POD6 files recursively under a root directory, returns POD for recompiled or specified file.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "perl": "6.d",
   "authors": [
     "Richard Hainsworth, aka finanalyst"

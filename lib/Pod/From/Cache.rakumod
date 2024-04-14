@@ -150,7 +150,7 @@ class Pod::From::Cache {
         for @!sources {
             $proc = run(<<git log -1 '--format="%cs"' -- $_ >>, :out, :err);
             %!last-edited{ $_ } =
-                $proc.exitcode ?? 'Not available' !! $proc.out.slurp(:close)
+                $proc.exitcode ?? 'Not available' !! $proc.out.slurp(:close).comb(/ <-["]>+ /)[0]
         }
     }
 }
