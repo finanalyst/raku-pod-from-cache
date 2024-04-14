@@ -6,3 +6,4 @@ rakudoc_cache/
 workspace.xml
 *.iml
 .idea/
+/sdist/

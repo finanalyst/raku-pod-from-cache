@@ -148,7 +148,7 @@ class Pod::From::Cache {
     method get-times {
         my $proc;
         for @!sources {
-            $proc = run(<<git log -1 '--format="%cs"' -- $_ >>, :out, :err);
+            $proc = run(<<git -c { $!doc-source } log -1 '--format="%cs"' -- $_ >>, :out, :err);
             %!last-edited{ $_ } =
                 $proc.exitcode ?? 'Not available' !! $proc.out.slurp(:close).comb(/ <-["]>+ /)[0]
         }
